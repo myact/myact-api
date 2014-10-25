@@ -11,6 +11,8 @@ AgentController.prototype = Object.create( BaseController.prototype );
 
 AgentController.prototype.Model = Agent;
 
+AgentController.prototype.authorize = [ 'store', 'update', 'patch', 'delete' ];
+
 AgentController.prototype.store = function( body, options ) {
     return BaseController.prototype.store.apply( this, arguments )
         .then(function( provider ) {

@@ -8,3 +8,5 @@ var ProviderController = module.exports = function() {
 ProviderController.prototype = Object.create( BaseController.prototype );
 
 ProviderController.prototype.Model = Provider;
+
+ProviderController.prototype.authorize = [ 'store', 'update', 'patch', 'delete' ];

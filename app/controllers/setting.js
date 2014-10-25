@@ -8,3 +8,5 @@ var SettingController = module.exports = function() {
 SettingController.prototype = Object.create( BaseController.prototype );
 
 SettingController.prototype.Model = Setting;
+
+SettingController.prototype.authorize = true;
