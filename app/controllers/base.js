@@ -45,7 +45,7 @@ BaseController.prototype.injectAuthMiddleware = function() {
 BaseController.prototype.assignRouteHandlers = function() {
     var _this = this;
 
-    this.dispatcher = express.Router();
+    this.router = express.Router();
 
     for ( var route in this.routes ) {
         var routeOptions = this.routes[ route ],
@@ -56,7 +56,7 @@ BaseController.prototype.assignRouteHandlers = function() {
         });
 
         middlewares.push( http( this[ route ].bind( this ) ) );
-        this.dispatcher[ method ].apply( this.dispatcher, [ routeOptions.path ].concat( middlewares ) );
+        this.router[ method ].apply( this.router, [ routeOptions.path ].concat( middlewares ) );
     }
 };
 
