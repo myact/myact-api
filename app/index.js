@@ -1,12 +1,11 @@
 var express = require( 'express' );
 
 var Myact = module.exports = function( options ) {
-    this.app = express();
     this.options = options;
 };
 
 Myact.prototype.start = function() {
-    var app = this.app;
+    var app = express();
 
     require( './start/db' )( app );
 
