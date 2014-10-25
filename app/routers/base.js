@@ -9,21 +9,20 @@ var Promise = require( 'bluebird' ),
     auth = require( '../middlewares/auth' );
 
 var BaseRouter = module.exports = function() {
-    if ( 'undefined' === typeof this.routes ) {
-        this.routes = _.cloneDeep( BaseRouter.defaultRoutes );
-    }
-
+    this.routes = this.getRoutes();
     this.injectAuthMiddleware();
     this.assignRouteHandlers();
 };
 
-BaseRouter.defaultRoutes = {
-    index: { method: 'GET', path: '/', middlewares: [] },
-    show: { method: 'GET', path: '/:id', middlewares: [] },
-    store: { method: 'POST', path: '/', middlewares: [] },
-    update: { method: 'PUT', path: '/:id', middlewares: [] },
-    patch: { method: 'PATCH', path: '/:id', middlewares: [] },
-    delete: { method: 'DELETE', path: '/:id', middlewares: [] }
+BaseRouter.prototype.getRoutes = function() {
+    return {
+        index: { method: 'GET', path: '/', middlewares: [] },
+        show: { method: 'GET', path: '/:id', middlewares: [] },
+        store: { method: 'POST', path: '/', middlewares: [] },
+        update: { method: 'PUT', path: '/:id', middlewares: [] },
+        patch: { method: 'PATCH', path: '/:id', middlewares: [] },
+        delete: { method: 'DELETE', path: '/:id', middlewares: [] }
+    };
 };
 
 BaseRouter.prototype.Model = bookshelf.Model;

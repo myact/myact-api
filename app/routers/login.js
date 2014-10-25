@@ -7,12 +7,15 @@ var jwt = require( 'jwt-simple' ),
     config = require( '../config' );
 
 var LoginRouter = module.exports = function() {
-    this.routes = { store: BaseRouter.defaultRoutes.store };
-
     BaseRouter.apply( this, arguments );
 };
 
 LoginRouter.prototype = Object.create( BaseRouter.prototype );
+
+LoginRouter.prototype.getRoutes = function() {
+    var routes = BaseRouter.prototype.getRoutes.apply( this, arguments );
+    return { store: routes.store };
+};
 
 LoginRouter.prototype.Model = User;
 
