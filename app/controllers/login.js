@@ -23,7 +23,7 @@ LoginController.prototype.store = function( body, options ) {
     var user = BaseController.prototype.show.call( this, null, { id: body.email });
 
     return user.then(function( user ) {
-        return bcrypt.compareAsync( body.password, user.get( 'password' ) );
+        return bcrypt.compareAsync( body.password, user.login.get( 'password' ) );
     }).then(function( match ) {
         // No match indicates a failed login attempt
         if ( ! match ) {
@@ -41,7 +41,7 @@ LoginController.prototype.store = function( body, options ) {
                 exp: expires.valueOf()
             }, config.auth.jwtSecretKey ),
             expires: expires.valueOf(),
-            user: user.value().toJSON()
+            user: user.value().login.toJSON()
         };
     });
 };
