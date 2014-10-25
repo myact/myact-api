@@ -35,9 +35,9 @@ LoginRouter.prototype.store = function( body, options ) {
         return {
             token: jwt.encode({
                 iss: user.value().id,
-                exp: expires
+                exp: expires.valueOf()
             }, config.auth.jwtSecretKey ),
-            expires: expires,
+            expires: expires.valueOf(),
             user: user.value().toJSON()
         };
     });
