@@ -2,7 +2,7 @@ var BaseError = require( './base' );
 
 var InvalidRequestError = module.exports = function( message ) {
     if ( 'string' !== typeof message ) {
-        message = 'The request was malformed and could not be interpreted'
+        message = 'The request was malformed and could not be interpreted';
     }
 
     BaseError.call( this, message );
