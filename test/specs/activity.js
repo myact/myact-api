@@ -8,7 +8,7 @@ describe( 'activity', function() {
             .end(function( err, res ) {
                 expect( err ).to.be.null;
                 expect( res.status ).to.equal( 200 );
-                expect( res.body ).to.be.instanceof( Array );
+                expect( res.body.activities ).to.be.instanceof( Array );
 
                 done();
             });
