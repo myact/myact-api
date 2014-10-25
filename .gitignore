@@ -1,0 +1,11 @@
+# Secrets
+*.secret.js
+
+# Logs
+*.log
+
+# Data
+*.sqlite
+
+# Dependencies
+node_modules/
