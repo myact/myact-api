@@ -6,7 +6,7 @@ module.exports = function( req, res, next ) {
         require( './auth' )( req, res, next );
     } else {
         new Agent()
-            .where({ secret: req.body.secret })
+            .where({ secret: req.query.secret })
             .fetch({ require: true })
             .then(function( agent ) {
                 req.body.agent_id = agent.id;
