@@ -8,7 +8,8 @@ var Promise = require( 'bluebird' ),
     http = require( '../helpers/promisify-http' ),
     auth = require( '../middlewares/auth' );
 
-var BaseController = module.exports = function() {
+var BaseController = module.exports = function( module ) {
+    this.module = module;
     this.routes = this.getRoutes();
     this.injectAuthMiddleware();
     this.assignRouteHandlers();
@@ -60,8 +61,19 @@ BaseController.prototype.assignRouteHandlers = function() {
     }
 };
 
+BaseController.prototype.generateResponse = function( response ) {
+    var responseKey;
+    if ( response instanceof bookshelf.Collection ) {
+        responseKey = this.Model.prototype.tableName;
+    } else {
+        responseKey = this.module;
+    }
+
+    return _.object([ [ responseKey, response ] ])
+};
+
 BaseController.prototype.index = function() {
-    return this.Model.fetchAll();
+    return this.Model.fetchAll().then( this.generateResponse.bind( this ) );
 };
 
 BaseController.prototype.show = function( body, options ) {
@@ -70,6 +82,7 @@ BaseController.prototype.show = function( body, options ) {
     return model
         .query( 'where', model.idAttribute, '=', options.id )
         .fetch({ require: true })
+        .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
             return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
         });
@@ -78,6 +91,7 @@ BaseController.prototype.show = function( body, options ) {
 BaseController.prototype.store = function( body, options ) {
     return new this.Model()
         .save( body )
+        .then( this.generateResponse.bind( this ) )
         .catch( Checkit.Error, function() {
             return Promise.reject( new InvalidRequestError( 'The request syntax was malformed' ) );
         });
@@ -106,6 +120,7 @@ BaseController.prototype.patch = function( body, options ) {
         .then(function( resource ) {
             return resource.save( body, { patch: true });
         })
+        .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
             return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
         });

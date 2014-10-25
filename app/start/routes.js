@@ -8,6 +8,6 @@ module.exports = function( app ) {
         'login'
     ].forEach(function( module ) {
         var Controller = require( '../controllers/' + module );
-        app.use( '/' + module, new Controller( app ).router );
+        app.use( '/' + module, new Controller( module ).router );
     });
 };
