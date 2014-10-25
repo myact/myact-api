@@ -8,3 +8,5 @@ var UserRouter = module.exports = function() {
 UserRouter.prototype = Object.create( BaseRouter.prototype );
 
 UserRouter.prototype.Model = User;
+
+UserRouter.prototype.authorize = true;

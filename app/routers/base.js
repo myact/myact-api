@@ -1,20 +1,21 @@
 var Promise = require( 'bluebird' ),
     Checkit = require( 'checkit' ),
     express = require( 'express' ),
+    _ = require( 'lodash' ),
     NotFoundError = require( '../errors/not-found' ),
     InvalidRequestError = require( '../errors/invalid-request' ),
     bookshelf = require( 'bookshelf' ).bookshelf,
-    http = require( '../helpers/promisify-http' );
+    http = require( '../helpers/promisify-http' ),
+    auth = require( '../middlewares/auth' );
 
 var BaseRouter = module.exports = function() {
     if ( 'undefined' === typeof this.routes ) {
-        this.routes = BaseRouter.defaultRoutes;
+        this.routes = _.cloneDeep( BaseRouter.defaultRoutes );
     }
 
+    this.injectAuthMiddleware();
     this.assignRouteHandlers();
 };
-
-BaseRouter.prototype.Model = bookshelf.Model;
 
 BaseRouter.defaultRoutes = {
     index: { method: 'GET', path: '/', middlewares: [] },
@@ -23,6 +24,23 @@ BaseRouter.defaultRoutes = {
     update: { method: 'PUT', path: '/:id', middlewares: [] },
     patch: { method: 'PATCH', path: '/:id', middlewares: [] },
     delete: { method: 'DELETE', path: '/:id', middlewares: [] }
+};
+
+BaseRouter.prototype.Model = bookshelf.Model;
+
+BaseRouter.prototype.authorize = false;
+
+BaseRouter.prototype.injectAuthMiddleware = function() {
+    if ( true === this.authorize ) {
+        this.authorize = Object.keys( this.routes );
+    }
+
+    if ( this.authorize instanceof Array ) {
+        var routes = this.routes;
+        this.authorize.forEach(function( route ) {
+            routes[ route ].middlewares.unshift( auth );
+        });
+    }
 };
 
 BaseRouter.prototype.assignRouteHandlers = function() {
