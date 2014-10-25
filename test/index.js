@@ -8,8 +8,14 @@ var Knex = require( 'knex' ),
 
 describe( 'myact-api', function() {
     before(function( done ) {
-        // Delete existing test database
-        fs.unlinkAsync( config.db.connection.filename ).then(function() {
+        fs.existsAsync( config.db.connection.filename ).then(function( exists ) {
+            // Delete existing test database
+            if ( exists ) {
+                return fs.unlinkAsync( config.db.connection.filename );
+            } else {
+                return Promise.resolve();
+            }
+        }).then(function() {
             // Re-create test database as empty file
             return fs.openAsync( config.db.connection.filename, 'w' );
         }).then(function() {
