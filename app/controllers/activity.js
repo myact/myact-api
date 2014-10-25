@@ -2,17 +2,17 @@ var _ = require( 'lodash' ),
     Promise = require( 'bluebird' ),
     Activity = require( '../models/activity' ),
     DuplicateEntityError = require( '../errors/duplicate-entity' ),
-    BaseRouter = require( './base' ),
+    BaseController = require( './base' ),
     interpretAgent = require( '../middlewares/interpret-agent' );
 
-var ActivityRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var ActivityController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-ActivityRouter.prototype = Object.create( BaseRouter.prototype );
+ActivityController.prototype = Object.create( BaseController.prototype );
 
-ActivityRouter.prototype.getRoutes = function() {
-    var routes = BaseRouter.prototype.getRoutes.apply( this, arguments );
+ActivityController.prototype.getRoutes = function() {
+    var routes = BaseController.prototype.getRoutes.apply( this, arguments );
 
     [ 'store', 'update', 'patch', 'delete' ].forEach(function( route ) {
         routes[ route ].middlewares.unshift( interpretAgent );
@@ -21,4 +21,4 @@ ActivityRouter.prototype.getRoutes = function() {
     return routes;
 };
 
-ActivityRouter.prototype.Model = Activity;
+ActivityController.prototype.Model = Activity;

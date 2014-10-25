@@ -1,10 +1,10 @@
 var Provider = require( '../models/provider' ),
-    BaseRouter = require( './base' );
+    BaseController = require( './base' );
 
-var ProviderRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var ProviderController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-ProviderRouter.prototype = Object.create( BaseRouter.prototype );
+ProviderController.prototype = Object.create( BaseController.prototype );
 
-ProviderRouter.prototype.Model = Provider;
+ProviderController.prototype.Model = Provider;

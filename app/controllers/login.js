@@ -1,26 +1,26 @@
 var jwt = require( 'jwt-simple' ),
     Promise = require( 'bluebird' ),
     bcrypt = Promise.promisifyAll( require( 'bcrypt' ) ),
-    BaseRouter = require( './base' ),
+    BaseController = require( './base' ),
     User = require( '../models/user' ),
     NotAuthorizedError = require( '../errors/not-authorized' ),
     config = require( '../config' );
 
-var LoginRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var LoginController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-LoginRouter.prototype = Object.create( BaseRouter.prototype );
+LoginController.prototype = Object.create( BaseController.prototype );
 
-LoginRouter.prototype.getRoutes = function() {
-    var routes = BaseRouter.prototype.getRoutes.apply( this, arguments );
+LoginController.prototype.getRoutes = function() {
+    var routes = BaseController.prototype.getRoutes.apply( this, arguments );
     return { store: routes.store };
 };
 
-LoginRouter.prototype.Model = User;
+LoginController.prototype.Model = User;
 
-LoginRouter.prototype.store = function( body, options ) {
-    var user = BaseRouter.prototype.show.call( this, null, { id: body.email });
+LoginController.prototype.store = function( body, options ) {
+    var user = BaseController.prototype.show.call( this, null, { id: body.email });
 
     return user.then(function( user ) {
         return bcrypt.compareAsync( body.password, user.get( 'password' ) );

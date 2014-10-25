@@ -1,10 +1,10 @@
 var Setting = require( '../models/setting' ),
-    BaseRouter = require( './base' );
+    BaseController = require( './base' );
 
-var SettingRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var SettingController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-SettingRouter.prototype = Object.create( BaseRouter.prototype );
+SettingController.prototype = Object.create( BaseController.prototype );
 
-SettingRouter.prototype.Model = Setting;
+SettingController.prototype.Model = Setting;

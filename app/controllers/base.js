@@ -8,13 +8,13 @@ var Promise = require( 'bluebird' ),
     http = require( '../helpers/promisify-http' ),
     auth = require( '../middlewares/auth' );
 
-var BaseRouter = module.exports = function() {
+var BaseController = module.exports = function() {
     this.routes = this.getRoutes();
     this.injectAuthMiddleware();
     this.assignRouteHandlers();
 };
 
-BaseRouter.prototype.getRoutes = function() {
+BaseController.prototype.getRoutes = function() {
     return {
         index: { method: 'GET', path: '/', middlewares: [] },
         show: { method: 'GET', path: '/:id', middlewares: [] },
@@ -25,11 +25,11 @@ BaseRouter.prototype.getRoutes = function() {
     };
 };
 
-BaseRouter.prototype.Model = bookshelf.Model;
+BaseController.prototype.Model = bookshelf.Model;
 
-BaseRouter.prototype.authorize = false;
+BaseController.prototype.authorize = false;
 
-BaseRouter.prototype.injectAuthMiddleware = function() {
+BaseController.prototype.injectAuthMiddleware = function() {
     if ( true === this.authorize ) {
         this.authorize = Object.keys( this.routes );
     }
@@ -42,7 +42,7 @@ BaseRouter.prototype.injectAuthMiddleware = function() {
     }
 };
 
-BaseRouter.prototype.assignRouteHandlers = function() {
+BaseController.prototype.assignRouteHandlers = function() {
     var _this = this;
 
     this.dispatcher = express.Router();
@@ -60,11 +60,11 @@ BaseRouter.prototype.assignRouteHandlers = function() {
     }
 };
 
-BaseRouter.prototype.index = function() {
+BaseController.prototype.index = function() {
     return this.Model.fetchAll();
 };
 
-BaseRouter.prototype.show = function( body, options ) {
+BaseController.prototype.show = function( body, options ) {
     var model = new this.Model();
 
     return model
@@ -75,7 +75,7 @@ BaseRouter.prototype.show = function( body, options ) {
         });
 };
 
-BaseRouter.prototype.store = function( body, options ) {
+BaseController.prototype.store = function( body, options ) {
     return new this.Model()
         .save( body )
         .catch( Checkit.Error, function() {
@@ -83,7 +83,7 @@ BaseRouter.prototype.store = function( body, options ) {
         });
 };
 
-BaseRouter.prototype.update = function( body, options ) {
+BaseController.prototype.update = function( body, options ) {
     var model = new this.Model();
 
     return model
@@ -97,7 +97,7 @@ BaseRouter.prototype.update = function( body, options ) {
         });
 };
 
-BaseRouter.prototype.patch = function( body, options ) {
+BaseController.prototype.patch = function( body, options ) {
     var model = new this.Model();
 
     return model
@@ -111,7 +111,7 @@ BaseRouter.prototype.patch = function( body, options ) {
         });
 };
 
-BaseRouter.prototype.delete = function( body, options ) {
+BaseController.prototype.delete = function( body, options ) {
     var model = new this.Model();
 
     return model

@@ -1,12 +1,12 @@
 var User = require( '../models/user' )
-    BaseRouter = require( './base' );
+    BaseController = require( './base' );
 
-var UserRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var UserController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-UserRouter.prototype = Object.create( BaseRouter.prototype );
+UserController.prototype = Object.create( BaseController.prototype );
 
-UserRouter.prototype.Model = User;
+UserController.prototype.Model = User;
 
-UserRouter.prototype.authorize = true;
+UserController.prototype.authorize = true;

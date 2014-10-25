@@ -1,17 +1,18 @@
 var Agent = require( '../models/agent' ),
-    BaseRouter = require( './base' ),
+    BaseController = require( './base' ),
     agentDaemon = require( '../helpers/agent-daemon' );
 
-var AgentRouter = module.exports = function() {
-    BaseRouter.apply( this, arguments );
+var AgentController = module.exports = function() {
+    BaseController.apply( this, arguments );
 };
 
-AgentRouter.prototype = Object.create( BaseRouter.prototype );
 
-AgentRouter.prototype.Model = Agent;
+AgentController.prototype = Object.create( BaseController.prototype );
 
-AgentRouter.prototype.store = function( body, options ) {
-    return BaseRouter.prototype.store.apply( this, arguments )
+AgentController.prototype.Model = Agent;
+
+AgentController.prototype.store = function( body, options ) {
+    return BaseController.prototype.store.apply( this, arguments )
         .then(function( provider ) {
             agentDaemon.start( provider );
 

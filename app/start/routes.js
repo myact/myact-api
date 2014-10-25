@@ -7,7 +7,7 @@ module.exports = function( app ) {
         'user',
         'login'
     ].forEach(function( module ) {
-        var Router = require( '../routers/' + module );
-        app.use( '/' + module, new Router( app ).dispatcher );
+        var Controller = require( '../controllers/' + module );
+        app.use( '/' + module, new Controller( app ).dispatcher );
     });
 };
