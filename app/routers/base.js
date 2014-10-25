@@ -44,9 +44,6 @@ BaseRouter.prototype.assignRouteHandlers = function() {
 };
 
 BaseRouter.prototype.index = function() {
-    // @TODO: Filtering (skip, take)
-    // @TODO: Return response as property array (i.e. { users: [] } )
-
     return this.Model.fetchAll();
 };
 

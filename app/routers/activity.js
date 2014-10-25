@@ -18,5 +18,3 @@ var ActivityRouter = module.exports = function() {
 ActivityRouter.prototype = Object.create( BaseRouter.prototype );
 
 ActivityRouter.prototype.Model = Activity;
-
-// @TODO: Index by provider_id
