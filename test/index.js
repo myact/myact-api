@@ -19,4 +19,5 @@ describe( 'myact-api', function() {
     });
 
     require( './specs/controllers/base' );
+    require( './specs/controllers/setting' );
 });
