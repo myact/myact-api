@@ -84,7 +84,7 @@ BaseController.prototype.show = function( body, options ) {
         .fetch({ require: true })
         .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
-            return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
+            return Promise.reject( new NotFoundError() );
         });
 };
 
@@ -107,7 +107,7 @@ BaseController.prototype.update = function( body, options ) {
             return resource.save( body );
         })
         .catch( this.Model.NotFoundError, function() {
-            return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
+            return Promise.reject( new NotFoundError() );
         });
 };
 
@@ -122,7 +122,7 @@ BaseController.prototype.patch = function( body, options ) {
         })
         .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
-            return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
+            return Promise.reject( new NotFoundError() );
         });
 };
 
@@ -136,6 +136,6 @@ BaseController.prototype.delete = function( body, options ) {
             return resource.destroy();
         })
         .catch( this.Model.NotFoundError, function() {
-            return Promise.reject( new NotFoundError( 'The requested resource does not exist' ) );
+            return Promise.reject( new NotFoundError() );
         });
 };
