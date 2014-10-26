@@ -1,10 +1,10 @@
-var request = require( 'supertest' ),
+var request = require( 'superagent' ),
     expect = require( 'chai' ).expect;
 
 describe( 'activity', function() {
     it( 'should respond with a list of activities', function( done ) {
-        request( this.app )
-            .get( '/activity' )
+        request
+            .get( this.root + '/activity' )
             .end(function( err, res ) {
                 expect( err ).to.be.null;
                 expect( res.status ).to.equal( 200 );

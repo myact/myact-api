@@ -8,6 +8,10 @@ describe( 'myact-api', function() {
             .then( new Myact( options ).start )
             .then(function( app ) {
                 this.app = app;
+                this.server = app.listen( 0 );
+                this.address = this.server.address();
+                this.root = 'http://' + this.address.address + ':' + this.address.port;
+
                 done();
             }.bind( this ) );
     });
