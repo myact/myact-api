@@ -89,7 +89,7 @@ BaseController.prototype.store = function( body, options ) {
         .save( body )
         .then( this.generateResponse.bind( this ) )
         .catch( Checkit.Error, function() {
-            return Promise.reject( new InvalidRequestError( 'The request syntax was malformed' ) );
+            return Promise.reject( new InvalidRequestError() );
         });
 };
 
