@@ -3,7 +3,7 @@ var request = require( 'supertest' ),
 
 describe( 'activity', function() {
     it( 'should respond with a list of activities', function( done ) {
-        request( this.server )
+        request( this.app )
             .get( '/activity' )
             .end(function( err, res ) {
                 expect( err ).to.be.null;
