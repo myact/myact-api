@@ -18,5 +18,5 @@ describe( 'myact-api', function() {
             }.bind( this ) );
     });
 
-    require( './specs/activity' );
+    require( './specs/controllers/base' );
 });
