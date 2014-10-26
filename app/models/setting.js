@@ -8,5 +8,7 @@ var Setting = module.exports = BaseModel.extend({
     rules: {
         name: [ 'required' ],
         value: [ 'required' ]
-    }
+    },
+
+    uniques: [ 'name' ]
 });
