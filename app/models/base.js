@@ -31,15 +31,19 @@ var BaseModel = module.exports = bookshelf.Model.extend({
     },
 
     validateUniques: function() {
-        if ( 0 === this.uniques.length ) {
+        var _this = this;
+
+        var changedUniques = this.uniques.filter(function( unique ) {
+            return _this.hasChanged( unique );
+        });
+
+        if ( 0 === changedUniques.length ) {
             return Promise.resolve();
         }
 
-        var _this = this;
-
         return new this.constructor().query(function( qb ) {
-            for ( var u = 0, ul = _this.uniques.length; u < ul; u++ ) {
-                var unique = _this.uniques[ u ],
+            for ( var u = 0, ul = changedUniques.length; u < ul; u++ ) {
+                var unique = changedUniques[ u ],
                     comparator = ( 0 === u ) ? 'where' : 'orWhere';
 
                 qb[ comparator ]( unique, '=', _this.attributes[ unique ] );
