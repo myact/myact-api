@@ -52,12 +52,8 @@ BaseController.prototype.assignRouteHandlers = function() {
         var routeOptions = this.routes[ route ],
             method = routeOptions.method.toLowerCase();
 
-        var middlewares = routeOptions.middlewares.map(function( middleware ) {
-            return middleware.bind( _this );
-        });
-
-        middlewares.push( http( this[ route ].bind( this ) ) );
-        this.router[ method ].apply( this.router, [ routeOptions.path ].concat( middlewares ) );
+        routeOptions.middlewares.push( http( this[ route ].bind( this ) ) );
+        this.router[ method ].apply( this.router, [ routeOptions.path ].concat( routeOptions.middlewares ) );
     }
 };
 
