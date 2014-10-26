@@ -100,11 +100,19 @@ BaseController.prototype.update = function( body, options ) {
         .query( 'where', model.idAttribute, '=', options.id )
         .fetch({ require: true })
         .then(function( resource ) {
-            return resource.save( body );
+            var toUnset = _.omit( resource.attributes, Object.keys( body ), model.idAttribute );
+
+            return resource
+                .set( body )
+                .set( toUnset, { unset: true })
+                .save();
         })
         .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
             return Promise.reject( new NotFoundError() );
+        })
+        .catch( Checkit.Error, function() {
+            return Promise.reject( new InvalidRequestError() );
         });
 };
 
