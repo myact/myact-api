@@ -25,6 +25,7 @@
     "jwt-simple": "^0.2.0",
     "knex": "^0.7.2",
     "lodash": "^2.4.1",
+    "method-override": "^2.3.0",
     "oauth2orize": "^1.0.1"
   },
   "devDependencies": {
