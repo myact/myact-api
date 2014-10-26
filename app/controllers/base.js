@@ -102,6 +102,7 @@ BaseController.prototype.update = function( body, options ) {
         .then(function( resource ) {
             return resource.save( body );
         })
+        .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
             return Promise.reject( new NotFoundError() );
         });
