@@ -123,7 +123,7 @@ BaseController.prototype.patch = function( body, options ) {
         .query( 'where', model.idAttribute, '=', options.id )
         .fetch({ require: true })
         .then(function( resource ) {
-            return resource.save( body, { patch: true });
+            return resource.save( body );
         })
         .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
