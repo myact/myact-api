@@ -4,12 +4,12 @@ var Myact = require( '../app/' ),
 
 describe( 'myact-api', function() {
     before(function( done ) {
-        new TestScaffolder( options ).scaffold().then(function() {
-            return new Myact( options ).start();
-        }).then(function( app ) {
-            this.app = app;
-            done();
-        }.bind( this ) );
+        new TestScaffolder( options ).scaffold()
+            .then( new Myact( options ).start )
+            .then(function( app ) {
+                this.app = app;
+                done();
+            }.bind( this ) );
     });
 
     require( './specs/activity' );
