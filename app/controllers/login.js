@@ -41,7 +41,7 @@ LoginController.prototype.store = function( body, options ) {
         // Return token
         return {
             token: jwt.encode({
-                iss: user.value().id,
+                iss: user.value().login.id,
                 exp: expires.valueOf()
             }, config.auth.jwtSecretKey ),
             expires: expires.valueOf(),
