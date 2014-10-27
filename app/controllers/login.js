@@ -20,9 +20,13 @@ LoginController.prototype.getRoutes = function() {
 LoginController.prototype.Model = User;
 
 LoginController.prototype.store = function( body, options ) {
-    var user = BaseController.prototype.show.call( this, null, { id: body.email });
+    var user = BaseController.prototype.show.call( this, null, { id: body.email }).error( new Function() );
 
     return user.then(function( user ) {
+        if ( 'undefined' === typeof user ) {
+            return false;
+        }
+
         return bcrypt.compareAsync( body.password, user.login.get( 'password' ) );
     }).then(function( match ) {
         // No match indicates a failed login attempt
