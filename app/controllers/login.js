@@ -14,7 +14,11 @@ LoginController.prototype = Object.create( BaseController.prototype );
 
 LoginController.prototype.getRoutes = function() {
     var routes = BaseController.prototype.getRoutes.apply( this, arguments );
-    return { store: routes.store };
+
+    return {
+        store: routes.store,
+        verify: { method: 'POST', path: '/verify', middlewares: [] }
+    };
 };
 
 LoginController.prototype.Model = User;
@@ -48,4 +52,32 @@ LoginController.prototype.store = function( body, options ) {
             user: user.value().login.toJSON()
         };
     });
+};
+
+LoginController.prototype.verify = function( body, options ) {
+    var exp;
+
+    return Promise.resolve( body.token )
+        .then(function( token ) {
+            return jwt.decode( token, config.auth.jwtSecretKey );
+        })
+        .then(function( decoded ) {
+            exp = decoded.exp;
+            if ( decoded.exp <= Date.now() ) throw new NotAuthorizedError( 'Token is expired' );
+            return new User({ email: decoded.iss }).fetch();
+        })
+        .then(function( user ) {
+            return {
+                token: body.token,
+                expires: exp,
+                user: user
+            };
+        })
+        .catch(function( err ) {
+            if ( ! ( err instanceof NotAuthorizedError ) ) {
+                err = new NotAuthorizedError();
+            }
+
+            throw err;
+        });
 };
