@@ -27,12 +27,17 @@ AgentDaemon.prototype.start = function( agent ) {
     // Start listening to events on handler
     var handler = new ProviderHandler({ agent: agent });
     handler.on( 'item', this.save.bind( this, agent ) );
-    handler.invoke();
+    this.invoke( handler );
 
     // Schedule interval to repeat invocation
     if ( true === handler.interval ) handler.interval = this.options.interval;
     if ( 'number' === typeof handler.interval ) {
         clearInterval( this.intervals[ agent.id ] );
-        this.intervals[ agent.id ] = setInterval( handler.invoke, handler.interval );
+        this.intervals[ agent.id ] = setInterval( this.invoke.bind( this, handler ), handler.interval );
     }
+};
+
+AgentDaemon.prototype.invoke = function( handler ) {
+    handler.invoke();
+    handler.options.agent.save({ last_run: new Date() }, { force: true });
 };
