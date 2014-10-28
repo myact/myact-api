@@ -2,7 +2,7 @@ var Agent = require( '../models/agent' ),
     NotAuthorizedError = require( '../errors/not-authorized' );
 
 module.exports = function( req, res, next ) {
-    if ( 'string' !== typeof req.body.secret ) {
+    if ( 'string' !== typeof req.query.secret ) {
         require( './auth' )( req, res, next );
     } else {
         new Agent()
