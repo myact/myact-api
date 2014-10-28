@@ -22,23 +22,19 @@ var BaseModel = module.exports = bookshelf.Model.extend({
     },
 
     validate: function( model, attrs, options ) {
-        var _this = this;
-
         return this.validateUniques().then(function() {
-            _this.removeNonFillable();
+            this.removeNonFillable();
 
             if ( 'insert' === options.method ) {
-                return Checkit( _this.rules ).run( _this.attributes );
+                return Checkit( this.rules ).run( this.attributes );
             }
-        });
+        }.bind( this ) );
     },
 
     validateUniques: function() {
-        var _this = this;
-
         var changedUniques = this.uniques.filter(function( unique ) {
-            return _this.hasChanged( unique );
-        });
+            return this.hasChanged( unique );
+        }.bind( this ) );
 
         if ( 0 === changedUniques.length ) {
             return Promise.resolve();
@@ -49,9 +45,9 @@ var BaseModel = module.exports = bookshelf.Model.extend({
                 var unique = changedUniques[ u ],
                     comparator = ( 0 === u ) ? 'where' : 'orWhere';
 
-                qb[ comparator ]( unique, '=', _this.attributes[ unique ] );
+                qb[ comparator ]( unique, '=', this.attributes[ unique ] );
             }
-        }).fetch().then(function( model ) {
+        }.bind( this ) ).fetch().then(function( model ) {
             if ( null !== model ) {
                 return Promise.reject( new DuplicateEntityError() );
             }
