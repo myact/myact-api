@@ -21,5 +21,6 @@ describe( 'myact-api', function() {
     require( './specs/controllers/base' );
     require( './specs/controllers/login' );
     require( './specs/controllers/setting' );
+    require( './specs/controllers/agent' );
     require( './specs/helpers/random-string' );
 });
