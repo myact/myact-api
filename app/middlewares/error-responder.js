@@ -15,6 +15,7 @@ module.exports = function( error, req, res, next ) {
     res.status( error.code ).send({
         code: error.code,
         type: error.type,
-        message: error.message
+        message: error.message,
+        extra: error.extra
     });
 };

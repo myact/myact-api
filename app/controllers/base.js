@@ -3,7 +3,7 @@ var Promise = require( 'bluebird' ),
     express = require( 'express' ),
     _ = require( 'lodash' ),
     NotFoundError = require( '../errors/not-found' ),
-    InvalidRequestError = require( '../errors/invalid-request' ),
+    CheckitValidationError = require( '../errors/checkit-validation' ),
     bookshelf = require( 'bookshelf' ).bookshelf,
     http = require( '../helpers/promisify-http' ),
     auth = require( '../middlewares/auth' );
@@ -88,8 +88,8 @@ BaseController.prototype.store = function( body, options ) {
     return new this.Model()
         .save( body )
         .then( this.generateResponse.bind( this ) )
-        .catch( Checkit.Error, function() {
-            return Promise.reject( new InvalidRequestError() );
+        .catch( Checkit.Error, function( validation ) {
+            return Promise.reject( new CheckitValidationError( undefined, validation.errors ) );
         });
 };
 
@@ -111,8 +111,8 @@ BaseController.prototype.update = function( body, options ) {
         .catch( this.Model.NotFoundError, function() {
             return Promise.reject( new NotFoundError() );
         })
-        .catch( Checkit.Error, function() {
-            return Promise.reject( new InvalidRequestError() );
+        .catch( Checkit.Error, function( validation ) {
+            return Promise.reject( new CheckitValidationError( undefined, validation.errors ) );
         });
 };
 
