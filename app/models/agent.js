@@ -12,6 +12,8 @@ var Agent = module.exports = BaseModel.extend({
         provider_id: [ 'required' ]
     },
 
+    hasTimestamps: [ 'created_at' ],
+
     defaults: function() {
         this.set( 'secret', randomString( 64 ) );
         this.set( 'config', {} );
