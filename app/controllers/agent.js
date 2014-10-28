@@ -1,6 +1,6 @@
 var Agent = require( '../models/agent' ),
     BaseController = require( './base' ),
-    agentDaemon = require( '../helpers/agent-daemon' );
+    pubsub = require( '../pubsub' );
 
 var AgentController = module.exports = function() {
     BaseController.apply( this, arguments );
@@ -15,9 +15,12 @@ AgentController.prototype.authorize = [ 'store', 'update', 'patch', 'delete' ];
 
 AgentController.prototype.store = function( body, options ) {
     return BaseController.prototype.store.apply( this, arguments )
-        .then(function( provider ) {
-            agentDaemon.start( provider );
-
-            return provider;
-        });
+        .then(function( res ) {
+            return res.agent.load([ 'provider' ]);
+        })
+        .then(function( agent ) {
+            pubsub.emit( 'boot-agent', agent );
+            return agent;
+        })
+        .then( BaseController.prototype.generateResponse.bind( this ) );
 };

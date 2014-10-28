@@ -1,9 +1,14 @@
 var Agent = require( '../models/agent' ),
-    AgentDaemon = require( '../helpers/agent-daemon' );
+    AgentDaemon = require( '../helpers/agent-daemon' ),
+    pubsub = require( '../pubsub' );
 
 module.exports = function( app ) {
     var daemon = new AgentDaemon({
         interval: app.get( 'settings' ).defaultInterval
+    });
+
+    pubsub.on( 'boot-agent', function( agent ) {
+        daemon.start( agent );
     });
 
     Agent.fetchAll({
@@ -11,6 +16,6 @@ module.exports = function( app ) {
     }).then(function( collection ) {
         return collection.models;
     }).each(function( agent ) {
-        daemon.start( agent );
+        pubsub.emit( 'boot-agent', agent );
     });
 };
