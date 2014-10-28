@@ -13,7 +13,7 @@ module.exports = function( req, res, next ) {
                 next();
             })
             .catch(function() {
-                next( new NotAuthorizedError( 'The `secret` parameter was invalid' ) );
+                next( new NotAuthorizedError( 'The secret parameter was invalid' ) );
             });
     }
 };
