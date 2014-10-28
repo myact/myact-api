@@ -21,12 +21,15 @@ var BaseModel = module.exports = bookshelf.Model.extend({
         this.on( 'saving', this.validate, this );
     },
 
-    validate: function() {
+    validate: function( model, attrs, options ) {
         var _this = this;
 
         return this.validateUniques().then(function() {
             _this.removeNonFillable();
-            return Checkit( _this.rules ).run( _this.attributes );
+
+            if ( 'insert' === options.method ) {
+                return Checkit( _this.rules ).run( _this.attributes );
+            }
         });
     },
 
