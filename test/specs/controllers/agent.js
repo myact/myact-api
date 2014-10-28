@@ -26,7 +26,7 @@ describe( 'agent stroller', function() {
         });
 
         it( 'should immediately trigger an agent run', function( done ) {
-            var now = new Date();
+            var now = Date.now();
 
             request
                 .post( this.root + '/agent' )
@@ -40,7 +40,7 @@ describe( 'agent stroller', function() {
                         .get( this.root + '/agent/' + res.body.agent.id )
                         .set( 'Authorization', 'JWT ' + this.token )
                         .end(function( err, res ) {
-                            expect( new Date( res.body.agent.last_run ) ).to.be.at.least( new Date() );
+                            expect( new Date( res.body.agent.last_run ) ).to.be.at.least( now );
 
                             done( err );
                         });
