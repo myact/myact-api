@@ -23,7 +23,9 @@ var BaseModel = module.exports = bookshelf.Model.extend({
 
     validate: function( model, attrs, options ) {
         return this.validateUniques().then(function() {
-            this.removeNonFillable();
+            if ( ! options.force ) {
+                this.removeNonFillable();
+            }
 
             if ( 'insert' === options.method ) {
                 return Checkit( this.rules ).run( this.attributes );
