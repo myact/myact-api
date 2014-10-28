@@ -14,6 +14,7 @@ var Agent = module.exports = BaseModel.extend({
 
     defaults: function() {
         this.set( 'secret', randomString( 64 ) );
+        this.set( 'config', {} );
     },
 
     provider: function() {
