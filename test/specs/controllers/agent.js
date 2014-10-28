@@ -2,7 +2,7 @@ var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
     retrieveToken = require( '../../db/helpers/retrieve-token' );
 
-describe( 'agent stroller', function() {
+describe( 'agent controller', function() {
     describe( 'store', function() {
         before(function( done ) {
             retrieveToken( this.root, function( err, token ) {
