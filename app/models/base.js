@@ -27,9 +27,7 @@ var BaseModel = module.exports = bookshelf.Model.extend({
                 this.removeNonFillable();
             }
 
-            if ( 'insert' === options.method ) {
-                return Checkit( this.rules ).run( this.attributes );
-            }
+            return Checkit( this.rules ).run( this.attributes );
         }.bind( this ) );
     },
 
