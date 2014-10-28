@@ -13,8 +13,6 @@ ActivityController.prototype = Object.create( BaseController.prototype );
 
 ActivityController.prototype.Model = Activity;
 
-ActivityController.prototype.authorize = [ 'store', 'update', 'patch', 'delete' ];
-
 ActivityController.prototype.getRoutes = function() {
     var routes = BaseController.prototype.getRoutes.apply( this, arguments );
 
