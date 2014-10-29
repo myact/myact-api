@@ -52,11 +52,13 @@ describe( 'login controller', function() {
     });
 
     describe( 'verify', function() {
+        var token;
+
         before(function( done ) {
-            retrieveToken( this.root, function( err, token ) {
-                this.token = token;
+            retrieveToken( this.root, function( err, auth ) {
+                token = auth;
                 done( err );
-            }.bind( this ) );
+            });
         });
 
         it( 'should respond with unauthorized if token is invalid', function( done ) {
@@ -74,14 +76,15 @@ describe( 'login controller', function() {
         });
 
         it( 'should respond with expired if token is expired', function( done ) {
-            var config = require( '../../../app/config' ),
+            var root = this.root,
+                config = require( '../../../app/config' ),
                 currentTokenDurationDays = config.auth.tokenDurationDays;
 
             config.auth.tokenDurationDays = -1;
 
-            retrieveToken( this.root, function( err, token ) {
+            retrieveToken( root, function( err, token ) {
                 request
-                    .post( this.root + '/login/verify' )
+                    .post( root + '/login/verify' )
                     .send({ token: token })
                     .end(function( err, res ) {
                         expect( err ).to.be.null;
@@ -92,13 +95,13 @@ describe( 'login controller', function() {
                         config.auth.tokenDurationDays = currentTokenDurationDays;
                         done();
                     });
-            }.bind( this ) );
+            });
         });
 
         it( 'should respond with token details if token is valid', function( done ) {
             request
                 .post( this.root + '/login/verify' )
-                .send({ token: this.token })
+                .send({ token: token })
                 .end(function( err, res ) {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );

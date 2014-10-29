@@ -4,17 +4,19 @@ var request = require( 'superagent' ),
 
 describe( 'setting controller', function() {
     describe( 'index', function() {
+        var token;
+
         before(function( done ) {
-            retrieveToken( this.root, function( err, token ) {
-                this.token = token;
+            retrieveToken( this.root, function( err, auth ) {
+                token = auth;
                 done( err );
-            }.bind( this ) );
+            });
         });
 
         before(function( done ) {
             request
                 .post( this.root + '/setting' )
-                .set( 'Authorization', 'JWT ' + this.token )
+                .set( 'Authorization', 'JWT ' + token )
                 .send({ name: 'test', value: 'ok' })
                 .end(function() {
                     done();
@@ -35,7 +37,7 @@ describe( 'setting controller', function() {
         it( 'should respond with a set of key-value pairs', function( done ) {
             request
                 .get( this.root + '/setting' )
-                .set( 'Authorization', 'JWT ' + this.token )
+                .set( 'Authorization', 'JWT ' + token )
                 .end(function( err, res ) {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );

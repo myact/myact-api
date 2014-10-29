@@ -4,49 +4,49 @@ var request = require( 'superagent' ),
 
 describe( 'activity controller', function() {
     describe( 'store', function() {
+        var token, provider, agent;
+
         before(function( done ) {
-            retrieveToken( this.root, function( err, token ) {
-                this.token = token;
+            retrieveToken( this.root, function( err, auth ) {
+                token = auth;
                 done( err );
-            }.bind( this ) );
+            });
         });
 
         before(function( done ) {
             request
                 .post( this.root + '/provider' )
-                .set( 'Authorization', 'JWT ' + this.token )
+                .set( 'Authorization', 'JWT ' + token )
                 .send({
                     name: 'myact-provider-rss',
                     package: {}
                 })
                 .end(function( err, res ) {
-                    this.provider = res.body.provider;
-
+                    provider = res.body.provider;
                     done( err );
-                }.bind( this ) );
+                });
         });
 
         before(function( done ) {
             request
                 .post( this.root + '/agent' )
-                .set( 'Authorization', 'JWT ' + this.token )
+                .set( 'Authorization', 'JWT ' + token )
                 .send({
-                    provider_id: this.provider.id,
+                    provider_id: provider.id,
                     config: { url: 'http://www.andrewduthie.com/feed.xml' },
                     secret: 'not-so-secret'
                 })
                 .end(function( err, res ) {
-                    this.agent = res.body.agent;
-
+                    agent = res.body.agent;
                     done( err );
-                }.bind( this ) );
+                });
         });
 
         it( 'shouldn\'t allow unauthenticated requests', function( done ) {
             request
                 .post( this.root + '/activity' )
                 .send({
-                    agent_id: this.agent.id,
+                    agent_id: agent.id,
                     key: '1',
                     data: {}
                 })
@@ -61,7 +61,7 @@ describe( 'activity controller', function() {
         });
 
         it( 'shouldn\'t allow an unauthenticated request if an incorrect secret is provided as a query parameter', function( done ) {
-            var activity = { agent_id: this.agent.id, key: '1', data: {} };
+            var activity = { agent_id: agent.id, key: '1', data: {} };
 
             request
                 .post( this.root + '/activity?secret=not-so-secret-and-not-so-correct' )
@@ -77,7 +77,7 @@ describe( 'activity controller', function() {
         });
 
         it( 'should allow an unauthenticated request if a correct secret is provided as a query parameter', function( done ) {
-            var activity = { agent_id: this.agent.id, key: '1', data: {} };
+            var activity = { agent_id: agent.id, key: '1', data: {} };
 
             request
                 .post( this.root + '/activity?secret=not-so-secret' )
@@ -102,10 +102,10 @@ describe( 'activity controller', function() {
                 .end(function( err, res ) {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );
-                    expect( res.body.activity.agent_id ).to.equal( this.agent.id )
+                    expect( res.body.activity.agent_id ).to.equal( agent.id )
 
                     done();
-                }.bind( this ) );
+                });
         });
     });
 });
