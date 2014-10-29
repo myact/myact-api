@@ -1,30 +1,23 @@
 var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
-    authenticate = require( '../../helpers/authenticate' );
+    helpers = require( '../../helpers/' );
 
 describe( 'agent controller', function() {
     describe( 'store', function() {
         var token, provider;
 
         before(function( done ) {
-            authenticate( this.root, function( err, auth ) {
-                token = auth;
+            helpers.authenticate( this.root, function( err, _token ) {
+                token = _token;
                 done( err );
             });
         });
 
         before(function( done ) {
-            request
-                .post( this.root + '/provider' )
-                .set( 'Authorization', 'JWT ' + token )
-                .send({
-                    name: 'myact-provider-rss',
-                    package: {}
-                })
-                .end(function( err, res ) {
-                    provider = res.body.provider;
-                    done( err );
-                });
+            helpers.resource( 'provider', this.root, token ).then(function( _provider ) {
+                provider = _provider;
+                done();
+            });
         });
 
         it( 'should immediately trigger an agent run', function( done ) {

@@ -1,45 +1,23 @@
 var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
-    authenticate = require( '../../helpers/authenticate' );
+    helpers = require( '../../helpers/' );
 
 describe( 'activity controller', function() {
     describe( 'store', function() {
         var token, provider, agent;
 
         before(function( done ) {
-            authenticate( this.root, function( err, auth ) {
-                token = auth;
+            helpers.authenticate( this.root, function( err, _token ) {
+                token = _token;
                 done( err );
             });
         });
 
         before(function( done ) {
-            request
-                .post( this.root + '/provider' )
-                .set( 'Authorization', 'JWT ' + token )
-                .send({
-                    name: 'myact-provider-rss',
-                    package: {}
-                })
-                .end(function( err, res ) {
-                    provider = res.body.provider;
-                    done( err );
-                });
-        });
-
-        before(function( done ) {
-            request
-                .post( this.root + '/agent' )
-                .set( 'Authorization', 'JWT ' + token )
-                .send({
-                    provider_id: provider.id,
-                    config: { url: 'http://www.andrewduthie.com/feed.xml' },
-                    secret: 'not-so-secret'
-                })
-                .end(function( err, res ) {
-                    agent = res.body.agent;
-                    done( err );
-                });
+            helpers.resource( 'agent', this.root, token ).then(function( _agent ) {
+                agent = _agent;
+                done();
+            });
         });
 
         it( 'shouldn\'t allow unauthenticated requests', function( done ) {

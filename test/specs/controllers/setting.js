@@ -1,14 +1,14 @@
 var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
-    authenticate = require( '../../helpers/authenticate' );
+    helpers = require( '../../helpers/' );
 
 describe( 'setting controller', function() {
     describe( 'index', function() {
         var token;
 
         before(function( done ) {
-            authenticate( this.root, function( err, auth ) {
-                token = auth;
+            helpers.authenticate( this.root, function( err, _token ) {
+                token = _token;
                 done( err );
             });
         });
