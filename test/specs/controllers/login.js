@@ -1,6 +1,6 @@
 var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
-    retrieveToken = require( '../../db/helpers/retrieve-token' );
+    authenticate = require( '../../helpers/authenticate' );
 
 describe( 'login controller', function() {
     describe( 'store', function() {
@@ -55,7 +55,7 @@ describe( 'login controller', function() {
         var token;
 
         before(function( done ) {
-            retrieveToken( this.root, function( err, auth ) {
+            authenticate( this.root, function( err, auth ) {
                 token = auth;
                 done( err );
             });
@@ -82,7 +82,7 @@ describe( 'login controller', function() {
 
             config.auth.tokenDurationDays = -1;
 
-            retrieveToken( root, function( err, token ) {
+            authenticate( root, function( err, token ) {
                 request
                     .post( root + '/login/verify' )
                     .send({ token: token })

@@ -1,13 +1,13 @@
 var request = require( 'superagent' ),
     expect = require( 'chai' ).expect,
-    retrieveToken = require( '../../db/helpers/retrieve-token' );
+    authenticate = require( '../../helpers/authenticate' );
 
 describe( 'agent controller', function() {
     describe( 'store', function() {
         var token, provider;
 
         before(function( done ) {
-            retrieveToken( this.root, function( err, auth ) {
+            authenticate( this.root, function( err, auth ) {
                 token = auth;
                 done( err );
             });
