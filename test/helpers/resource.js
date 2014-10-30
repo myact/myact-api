@@ -48,13 +48,16 @@ var fetch = module.exports = function( resource, root, token, properties ) {
         properties = _.extend({}, resources.defaults[ resource ], properties );
 
         // If we've made it this far, create a new resource
-        return request
-            .post( root + '/' + resource )
-            .set( 'Authorization', 'JWT ' + token )
-            .send( properties )
+        var req = request.post( root + '/' + resource );
+        if ( 'string' === typeof token ) {
+            req = req.set( 'Authorization', 'JWT ' + token )
+        }
+        req = req.send( properties )
             .endAsync()
             .then(function( res ) {
                 return resources.cached[ resource ] = res.body[ resource ];
             });
+
+        return req;
     });
 };
