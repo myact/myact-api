@@ -47,5 +47,9 @@ describe( 'setting controller', function() {
                     done();
                 });
         });
+
+        it( 'should reset the application settings when a setting is updated', function() {
+            expect( this.app.get( 'settings' ).test ).to.equal( 'ok' );
+        });
     });
 });

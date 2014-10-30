@@ -8,9 +8,12 @@ var Promise = require( 'bluebird' ),
     http = require( '../helpers/promisify-http' ),
     auth = require( '../middlewares/auth' );
 
-var BaseController = module.exports = function( module ) {
+var BaseController = module.exports = function( app, module ) {
+    this.app = app;
+    this.settings = app.get( 'settings' );
     this.module = module;
     this.routes = this.getRoutes();
+
     this.injectAuthMiddleware();
     this.assignRouteHandlers();
 };

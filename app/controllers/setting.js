@@ -1,6 +1,7 @@
 var _ = require( 'lodash' ),
     Setting = require( '../models/setting' ),
-    BaseController = require( './base' );
+    BaseController = require( './base' ),
+    resetSettings = require( '../start/settings' );
 
 var SettingController = module.exports = function() {
     BaseController.apply( this, arguments );
@@ -24,4 +25,29 @@ SettingController.prototype.index = function() {
 
         return settings;
     });
+};
+
+SettingController.prototype.reset = function( method, args ) {
+    return BaseController.prototype[ method ].apply( this, args )
+        .then(function( res ) {
+            return resetSettings( this.app ).then(function() {
+                return res;
+            });
+        }.bind( this ) );
+};
+
+SettingController.prototype.store = function() {
+    return this.reset( 'store', arguments );
+};
+
+SettingController.prototype.update = function() {
+    return this.reset( 'update', arguments );
+};
+
+SettingController.prototype.patch = function() {
+    return this.reset( 'patch', arguments );
+};
+
+SettingController.prototype.delete = function() {
+    return this.reset( 'delete', arguments );
 };

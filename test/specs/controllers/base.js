@@ -7,7 +7,7 @@ describe( 'base controller', function() {
             Setting = require( '../../../app/models/setting' );
 
         // Create a new dummy controller
-        var controller = new BaseController( 'setting' );
+        var controller = new BaseController( this.app, 'setting' );
         controller.Model = Setting;
         this.app.use( '/fake', controller.router );
 
