@@ -26,12 +26,12 @@ LoginController.prototype.Model = User;
 LoginController.prototype.store = function( body, options ) {
     var user = BaseController.prototype.show.call( this, null, { id: body.email }).error( new Function() );
 
-    return user.then(function( user ) {
-        if ( 'undefined' === typeof user ) {
+    return user.then(function( res ) {
+        if ( 'undefined' === typeof res.login ) {
             return false;
         }
 
-        return bcrypt.compareAsync( body.password, user.login.get( 'password' ) );
+        return bcrypt.compareAsync( body.password, res.login.get( 'password' ) );
     }).then(function( match ) {
         // No match indicates a failed login attempt
         if ( ! match ) {
