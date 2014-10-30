@@ -6,6 +6,7 @@ exports.up = function( knex, Promise ) {
         table.string( 'secret' ).notNullable();
         table.json( 'config' ).notNullable();
         table.dateTime( 'created_at' ).notNullable();
+        table.dateTime( 'last_run' );
     });
 };
 
