@@ -5,10 +5,12 @@ var Promise = require( 'bluebird' ),
 var resources = {
     defaults: {
         provider: { name: 'myact-provider-rss', package: {} },
-        agent: { config: { url: 'http://www.andrewduthie.com/feed.xml' }, secret: 'not-so-secret' }
+        agent: { config: { url: 'http://www.andrewduthie.com/feed.xml' }, secret: 'not-so-secret' },
+        activity: { key: '0', data: {} }
     },
     depends: {
-        agent: [ 'provider' ]
+        agent: [ 'provider' ],
+        activity: [ 'agent' ]
     },
     cached: {}
 };
