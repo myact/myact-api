@@ -33,5 +33,8 @@ TestScaffolder.prototype.runTestDatabaseMigrations = function() {
 };
 
 TestScaffolder.prototype.runTestDatabaseSeeds = function() {
-    return this.knex.seed.run( this.options.db.seeds );
+    return Promise.all([
+        this.knex.seed.run( this.options.db.appSeeds ),
+        this.knex.seed.run( this.options.db.testSeeds )
+    ]);
 };

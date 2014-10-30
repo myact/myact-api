@@ -3,6 +3,7 @@ module.exports = {
         client: 'sqlite3',
         connection: { filename: __dirname + '/data/mon-api-test.sqlite' },
         migrations: { directory: 'app/db/migrations' },
-        seeds: { directory: 'test/db/seeds' }
+        appSeeds: { directory: 'app/db/seeds' },
+        testSeeds: { directory: 'test/db/seeds' }
     }
 };
