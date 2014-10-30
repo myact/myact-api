@@ -7,4 +7,8 @@ describe( 'settings start', function() {
         expect( settings ).to.be.an( 'object' );
         expect( Object.keys( settings ).length ).to.be.at.least( 1 );
     });
+
+    it( 'should automatically convert numeric values to numbers', function() {
+        expect( this.app.get( 'settings' ).resultsPerPage ).to.be.a( 'number' );
+    });
 });
