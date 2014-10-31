@@ -27,7 +27,7 @@ LoginController.prototype.store = function( body, options ) {
     var user = BaseController.prototype.show.call( this, null, { id: body.email }).error( new Function() );
 
     return user.then(function( res ) {
-        if ( 'undefined' === typeof res.login ) {
+        if ( 'undefined' === typeof res || 'undefined' === typeof res.login ) {
             return false;
         }
 
