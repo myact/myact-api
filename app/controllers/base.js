@@ -10,7 +10,6 @@ var Promise = require( 'bluebird' ),
 
 var BaseController = module.exports = function( app, module ) {
     this.app = app;
-    this.settings = app.get( 'settings' );
     this.module = module;
     this.routes = this.getRoutes();
 
@@ -72,7 +71,12 @@ BaseController.prototype.generateResponse = function( response ) {
 };
 
 BaseController.prototype.index = function() {
-    return this.Model.fetchAll().then( this.generateResponse.bind( this ) );
+    return this.Model
+        .query(function( qb ) {
+            qb.limit( this.app.get( 'settings' ).resultsPerPage );
+        }.bind( this ) )
+        .fetchAll()
+        .then( this.generateResponse.bind( this ) );
 };
 
 BaseController.prototype.show = function( body, options ) {

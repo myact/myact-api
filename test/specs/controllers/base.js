@@ -1,5 +1,6 @@
 var request = require( 'superagent' ),
-    expect = require( 'chai' ).expect;
+    expect = require( 'chai' ).expect,
+    helpers = require( '../../helpers/' );
 
 describe( 'base controller', function() {
     before(function( done ) {
@@ -18,6 +19,32 @@ describe( 'base controller', function() {
     });
 
     describe( 'index', function() {
+        var token, setting, resultsPerPage;
+
+        before(function( done ) {
+            helpers.authenticate( this.root, function( err, _token ) {
+                token = _token;
+                done();
+            });
+        });
+
+        before(function( done ) {
+            helpers.resource( 'setting', this.root ).then(function( _setting ) {
+                setting = _setting;
+                done();
+            });
+        });
+
+        before(function( done ) {
+            request
+                .get( this.root + '/setting' )
+                .set( 'Authorization', 'JWT ' + token )
+                .end(function( err, res ) {
+                    resultsPerPage = res.body.resultsPerPage;
+                    done();
+                });
+        });
+
         it( 'should respond with a list of resources', function( done ) {
             request
                 .get( this.root + '/fake' )
@@ -25,7 +52,44 @@ describe( 'base controller', function() {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );
                     expect( res.body.settings ).to.be.instanceof( Array );
+                    expect( res.body.settings.length ).to.be.at.least( 2 );
 
+                    done();
+                });
+        });
+
+        it( 'should only return number of results based on resultsPerPage setting', function( done ) {
+            var root = this.root;
+
+            request
+                .put( root + '/setting/resultsPerPage' )
+                .set( 'Authorization', 'JWT ' + token )
+                .send({ value: 1 })
+                .end(function( err, res ) {
+                    expect( err ).to.be.null;
+                    expect( res.status ).to.equal( 200 );
+                    expect( res.body.setting ).to.be.an( 'object' );
+                    expect( res.body.setting.value ).to.equal( 1 );
+
+                    request
+                        .get( root + '/fake' )
+                        .end(function( err, res ) {
+                            expect( err ).to.be.null;
+                            expect( res.status ).to.equal( 200 );
+                            expect( res.body.settings ).to.be.instanceof( Array );
+                            expect( res.body.settings.length ).to.equal( 1 );
+
+                            done();
+                        });
+                });
+        });
+
+        after(function( done ) {
+            request
+                .put( this.root + '/setting/resultsPerPage' )
+                .set( 'Authorization', 'JWT ' + token )
+                .send({ value: resultsPerPage })
+                .end(function( err, res ) {
                     done();
                 });
         });
