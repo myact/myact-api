@@ -43,7 +43,7 @@ ProviderController.prototype.store = function( body, options ) {
         .then(function() {
             return provider;
         })
-        .catch(function( err ) {
+        .catch( Promise.OperationalError, function( err ) {
             if ( 'undefined' !== typeof provider ) {
                 // Destroy provider record if one was created
                 provider.provider.destroy();
