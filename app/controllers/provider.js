@@ -24,20 +24,17 @@ ProviderController.prototype.store = function( body, options ) {
             return npm.loadAsync({ loglevel: 'silent' });
         })
         .then(function() {
-            var install = Promise.promisify( npm.commands.install )([ body.name ]);
-
-            install.then(function( results ) {
-                // Update package details
-                var location = _.first( _.keys( results[1] ) ),
-                    pkg = require( __dirname + '/../../' + location + '/package.json' );
-
-                return provider.provider.save({ package: pkg });
-            }).error(function() { });
-
             if ( 'undefined' !== typeof options.async ) {
                 return Promise.resolve();
             } else {
-                return install;
+                return Promise.promisify( npm.commands.install )([ body.name ])
+                    .then(function( results ) {
+                        // Update package details
+                        var location = _.first( _.keys( results[1] ) ),
+                            pkg = require( __dirname + '/../../' + location + '/package.json' );
+
+                        return provider.provider.save({ package: pkg });
+                    });
             }
         })
         .then(function() {
