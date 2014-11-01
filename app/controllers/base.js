@@ -46,8 +46,6 @@ BaseController.prototype.injectAuthMiddleware = function() {
 };
 
 BaseController.prototype.assignRouteHandlers = function() {
-    var _this = this;
-
     this.router = express.Router();
 
     for ( var route in this.routes ) {
