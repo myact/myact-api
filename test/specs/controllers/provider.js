@@ -49,6 +49,7 @@ describe( 'provider controller', function() {
                 .end(function( err, res ) {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );
+                    expect( res.body.provider.id ).to.be.a( 'number' );
                     expect( res.body.provider.name ).to.equal( 'npmlog' );
                     expect( res.body.provider.package.name ).to.equal( 'npmlog' );
                     var pkg = require( '../../../node_modules/npmlog/package.json' );
