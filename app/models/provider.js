@@ -13,6 +13,10 @@ var Provider = module.exports = BaseModel.extend({
         name: [ 'required' ]
     },
 
+    defaults: function() {
+        this.set( 'package', {});
+    },
+
     agents: function() {
         var Agent = require( './agent' );
         return this.hasMany( Agent );
