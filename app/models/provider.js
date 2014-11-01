@@ -13,6 +13,8 @@ var Provider = module.exports = BaseModel.extend({
         name: [ 'required' ]
     },
 
+    uniques: [ 'name' ],
+
     defaults: function() {
         this.set( 'package', {});
     },
