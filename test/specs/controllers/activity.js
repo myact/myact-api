@@ -80,9 +80,37 @@ describe( 'activity controller', function() {
                 .end(function( err, res ) {
                     expect( err ).to.be.null;
                     expect( res.status ).to.equal( 200 );
-                    expect( res.body.activity.agent_id ).to.equal( agent.id )
+                    expect( res.body.activity.agent_id ).to.equal( agent.id );
 
                     done();
+                });
+        });
+
+        it( 'should perform an update if inserting using an existing key', function( done ) {
+            var activity = { key: '3', data: { value: 1 } },
+                root = this.root;
+
+            request
+                .post( root + '/activity?secret=not-so-secret' )
+                .send( activity )
+                .end(function( err, res ) {
+                    expect( err ).to.be.null;
+                    expect( res.status ).to.equal( 200 );
+                    expect( res.body.activity.data.value ).to.equal( 1 );
+
+                    var id = res.body.activity.id;
+                    activity.data.value = 2;
+
+                    request
+                        .post( root + '/activity?secret=not-so-secret' )
+                        .send( activity )
+                        .end(function( err, res ) {
+                            expect( err ).to.be.null;
+                            expect( res.status ).to.equal( 200 );
+                            expect( res.body.activity.data.value ).to.equal( 2 );
+
+                            done();
+                        });
                 });
         });
     });

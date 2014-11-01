@@ -22,3 +22,21 @@ ActivityController.prototype.getRoutes = function() {
 
     return routes;
 };
+
+ActivityController.prototype.store = function( body, options ) {
+    var self = this,
+        args = arguments;
+
+    return new Activity()
+        .where({ key: body.key })
+        .fetch()
+        .then(function( model ) {
+            var method = ( null === model ) ? 'store' : 'update';
+
+            if ( 'update' === method ) {
+                options.id = model.id;
+            }
+
+            return BaseController.prototype[ method ].apply( self, args );
+        });
+};
