@@ -1,7 +1,9 @@
 var _ = require( 'lodash' ),
     Promise = require( 'bluebird' ),
+    Checkit = require( 'checkit' ),
     Activity = require( '../models/activity' ),
     DuplicateEntityError = require( '../errors/duplicate-entity' ),
+    CheckitValidationError = require( '../errors/checkit-validation' ),
     BaseController = require( './base' ),
     interpretAgent = require( '../middlewares/interpret-agent' );
 
@@ -25,18 +27,25 @@ ActivityController.prototype.getRoutes = function() {
 
 ActivityController.prototype.store = function( body, options ) {
     var self = this,
-        args = arguments;
+        args = arguments,
+        model = new Activity();
 
-    return new Activity()
+    return model
         .where({ key: body.key })
         .fetch()
-        .then(function( model ) {
-            var method = ( null === model ) ? 'store' : 'update';
+        .then(function( resource ) {
+            if ( null === resource ) {
+                return BaseController.prototype.store.apply( self, args );
+            } else {
+                var toUnset = _.omit( resource.attributes, Object.keys( body ), model.idAttribute );
 
-            if ( 'update' === method ) {
-                options.id = model.id;
+                return resource
+                    .set( toUnset, { unset: true })
+                    .save( body, { method: 'update' })
+                    .then( self.generateResponse.bind( self ) )
+                    .catch( Checkit.Error, function( validation ) {
+                        return Promise.reject( new CheckitValidationError( undefined, validation.errors ) );
+                    });
             }
-
-            return BaseController.prototype[ method ].apply( self, args );
         });
 };

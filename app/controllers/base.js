@@ -110,9 +110,8 @@ BaseController.prototype.update = function( body, options ) {
             var toUnset = _.omit( resource.attributes, Object.keys( body ), model.idAttribute );
 
             return resource
-                .set( body )
                 .set( toUnset, { unset: true })
-                .save();
+                .save( body, { method: 'update' });
         })
         .then( this.generateResponse.bind( this ) )
         .catch( this.Model.NotFoundError, function() {
