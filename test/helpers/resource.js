@@ -8,6 +8,9 @@ var resources = {
         agent: { config: { url: 'http://www.andrewduthie.com/feed.xml' }, secret: 'not-so-secret' },
         activity: { key: '0', data: {} }
     },
+    options: {
+        provider: 'async'
+    },
     depends: {
         agent: [ 'provider' ],
         activity: [ 'agent' ]
@@ -48,9 +51,9 @@ var fetch = module.exports = function( resource, root, token, properties ) {
         properties = _.extend({}, resources.defaults[ resource ], properties );
 
         // If we've made it this far, create a new resource
-        var req = request.post( root + '/' + resource );
+        var req = request.post( root + '/' + resource + '?' + ( resources.options[ resource ] || '' ) );
         if ( 'string' === typeof token ) {
-            req = req.set( 'Authorization', 'JWT ' + token )
+            req = req.set( 'Authorization', 'JWT ' + token );
         }
         req = req.send( properties )
             .endAsync()
