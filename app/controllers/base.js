@@ -65,6 +65,7 @@ BaseController.prototype.generateResponse = function( response ) {
         responseKey = this.Model.prototype.tableName;
     } else {
         responseKey = this.module;
+        response.attributes.id = response.id;
     }
 
     return _.object([ [ responseKey, response ] ])

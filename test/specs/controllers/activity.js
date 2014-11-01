@@ -107,6 +107,7 @@ describe( 'activity controller', function() {
                         .end(function( err, res ) {
                             expect( err ).to.be.null;
                             expect( res.status ).to.equal( 200 );
+                            expect( res.body.activity.id ).to.be.equal( id );
                             expect( res.body.activity.data.value ).to.equal( 2 );
 
                             done();
