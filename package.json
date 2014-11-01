@@ -1,7 +1,7 @@
 {
   "name": "myact-api",
-  "description": "",
   "version": "0.1.0",
+  "description": "A home for your happenings",
   "main": "server.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
