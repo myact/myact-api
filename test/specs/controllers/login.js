@@ -55,9 +55,9 @@ describe( 'login controller', function() {
         var token;
 
         before(function( done ) {
-            helpers.authenticate( this.root, function( err, _token ) {
+            helpers.authenticate( this.root ).then(function( _token ) {
                 token = _token;
-                done( err );
+                done();
             });
         });
 
@@ -82,7 +82,7 @@ describe( 'login controller', function() {
 
             config.auth.tokenDurationDays = -1;
 
-            helpers.authenticate( root, function( err, token ) {
+            helpers.authenticate( root ).then(function( token ) {
                 request
                     .post( root + '/login/verify' )
                     .send({ token: token })

@@ -22,7 +22,7 @@ describe( 'base controller', function() {
         var token, setting, resultsPerPage;
 
         before(function( done ) {
-            helpers.authenticate( this.root, function( err, _token ) {
+            helpers.authenticate( this.root ).then(function( _token ) {
                 token = _token;
                 done();
             });

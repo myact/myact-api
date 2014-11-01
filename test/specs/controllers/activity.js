@@ -7,9 +7,9 @@ describe( 'activity controller', function() {
         var token, provider, agent;
 
         before(function( done ) {
-            helpers.authenticate( this.root, function( err, _token ) {
+            helpers.authenticate( this.root ).then(function( _token ) {
                 token = _token;
-                done( err );
+                done();
             });
         });
 
