@@ -69,10 +69,19 @@ BaseController.prototype.generateResponse = function( response ) {
     return _.object([ [ responseKey, response ] ])
 };
 
-BaseController.prototype.index = function() {
-    return this.Model
+BaseController.prototype.index = function( body, options ) {
+    var model = new this.Model();
+
+    return model
         .query(function( qb ) {
             qb.limit( this.app.get( 'settings' ).resultsPerPage );
+
+            for ( var param in options ) {
+                if ( -1 === model.hidden.indexOf( param ) ) {
+                    var value = options[ param ];
+                    qb.where( param, value );
+                }
+            }
         }.bind( this ) )
         .fetchAll()
         .then( this.generateResponse.bind( this ) );

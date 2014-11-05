@@ -84,6 +84,19 @@ describe( 'base controller', function() {
                 });
         });
 
+        it( 'should allow filtering based on non-hidden query parameter values', function() {
+            request
+                .get( root + '/fake?value=non-existent-value' )
+                .end(function( err, res ) {
+                    expect( err ).to.be.null;
+                    expect( res.status ).to.equal( 200 );
+                    expect( res.body.settings ).to.be.instanceof( Array );
+                    expect( res.body.settings.length ).to.equal( 0 );
+
+                    done();
+                });
+        });
+
         after(function( done ) {
             request
                 .put( this.root + '/setting/resultsPerPage' )
